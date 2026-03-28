@@ -123,6 +123,25 @@ body {
   }
 }
 
+button.header-brand {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  width: auto;
+  max-width: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.header-brand:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.8);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
 .header-brand {
   display: flex;
   align-items: center;
@@ -429,14 +448,14 @@ body {
   display: none !important;
 }
 
+/* Solo opacidad: un transform en el panel haría que los hijos position:fixed
+   (p. ej. el botón del carrito) se posicionen respecto al panel y “salten” al acabar la animación. */
 @keyframes panelIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

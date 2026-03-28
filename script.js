@@ -283,6 +283,11 @@
 
   elFiltro.addEventListener('change', filtrarRestaurantes);
 
+  document.getElementById('btn-inicio').addEventListener('click', function () {
+    mostrarSoloPanel(elStepRest);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   elListaPlatos.addEventListener('click', function (e) {
     var b = e.target.closest('[data-add-plato]');
     if (!b) return;
