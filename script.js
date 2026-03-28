@@ -58,6 +58,7 @@
       p.classList.toggle('active', on);
       p.hidden = !on;
     }
+    document.body.classList.toggle('flow-confirm', panel === elStepConf);
     actualizarIndicadoresPasos(panel);
   }
 
@@ -68,11 +69,23 @@
     if (panel === elStepRes) n = '3';
     if (panel === elStepConf) n = '3';
 
+    var elStepsWrap = document.querySelector('.steps-wrap');
+    if (elStepsWrap) elStepsWrap.setAttribute('data-progress', n);
+
+    var currentNum = parseInt(n, 10);
     var indicadores = document.querySelectorAll('[data-step-indicator]');
     for (var i = 0; i < indicadores.length; i++) {
       var el = indicadores[i];
       var step = el.getAttribute('data-step-indicator');
-      el.classList.toggle('active', step === n || (panel === elStepConf && step === '3'));
+      var sn = parseInt(step, 10);
+      var isConfirm = panel === elStepConf;
+      var isActive = isConfirm ? sn === 3 : sn === currentNum;
+      var isDone = isConfirm ? sn < 3 : sn < currentNum;
+
+      el.classList.toggle('active', isActive);
+      el.classList.toggle('done', isDone);
+      if (isActive) el.setAttribute('aria-current', 'step');
+      else el.removeAttribute('aria-current');
     }
   }
 
@@ -133,6 +146,10 @@
         '<span class="plato-precio">' +
         formatEuros(pl.precio) +
         '</span>' +
+        '<span class="plato-add-col">' +
+        '<span class="plato-cantidad" data-cant-plato="' +
+        pl.id +
+        '" hidden aria-live="polite">0</span>' +
         '<button type="button" class="btn-mini" data-add-plato="' +
         pl.id +
         '" data-nombre="' +
@@ -141,9 +158,11 @@
         pl.precio +
         '" data-img="' +
         escapeAttr(pl.img) +
-        '">+</button>';
+        '">+</button>' +
+        '</span>';
       elListaPlatos.appendChild(li);
     }
+    sincronizarCantidadesMenuVisible();
     mostrarSoloPanel(elStepProd);
   }
 
@@ -171,6 +190,50 @@
         img: img
       });
     }
+  }
+
+  function cantidadEnPedido(idPlato) {
+    var linea = lineaPedido(idPlato);
+    return linea ? linea.cantidad : 0;
+  }
+
+  function totalUnidadesEnPedido() {
+    var u = 0;
+    for (var i = 0; i < pedido.length; i++) {
+      u += pedido[i].cantidad;
+    }
+    return u;
+  }
+
+  function actualizarBadgeCantidadPlato(idPlato) {
+    var el = document.querySelector('[data-cant-plato="' + idPlato + '"]');
+    if (!el) return;
+    var n = cantidadEnPedido(idPlato);
+    el.textContent = String(n);
+    el.hidden = n === 0;
+    el.setAttribute('aria-label', n + ' en el pedido');
+  }
+
+  function actualizarTextoBotonCarrito() {
+    var sub = document.querySelector('.btn-cart-sub');
+    if (!sub) return;
+    var u = totalUnidadesEnPedido();
+    if (u === 0) {
+      sub.textContent = 'Revisa platos y total';
+    } else if (u === 1) {
+      sub.textContent = '1 artículo en el carrito';
+    } else {
+      sub.textContent = u + ' artículos en el carrito';
+    }
+  }
+
+  function sincronizarCantidadesMenuVisible() {
+    var badges = document.querySelectorAll('[data-cant-plato]');
+    for (var i = 0; i < badges.length; i++) {
+      var id = badges[i].getAttribute('data-cant-plato');
+      if (id) actualizarBadgeCantidadPlato(id);
+    }
+    actualizarTextoBotonCarrito();
   }
 
   function totalPedido() {
@@ -228,6 +291,8 @@
     var precio = parseFloat(b.getAttribute('data-precio'), 10);
     var imgPlato = b.getAttribute('data-img') || '';
     agregarPlato(id, nombre, precio, imgPlato);
+    actualizarBadgeCantidadPlato(id);
+    actualizarTextoBotonCarrito();
   });
 
   document.getElementById('btn-volver-rest').addEventListener('click', function () {
@@ -246,7 +311,7 @@
 
   document.getElementById('btn-comprar').addEventListener('click', function () {
     if (pedido.length === 0) {
-      alert('Añada al menos un plato antes de confirmar.');
+      alert('Añade al menos un plato al pedido antes de confirmar.');
       return;
     }
     var nombreRest = '';
@@ -264,6 +329,7 @@
       ' está en preparación. Tiempo aproximado: 35 minutos.';
     pedido = [];
     pintarResumen();
+    actualizarTextoBotonCarrito();
     mostrarSoloPanel(elStepConf);
   });
 

@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Delivery — Prototipo</title>
+    <title>Delivery — Sabor a domicilio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
     <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -15,130 +21,176 @@
   </head>
   <body>
     <header class="header">
-      <div class="header-top">
-        <img
-          src="./assets/logo-delivery.svg"
-          width="44"
-          height="44"
-          alt=""
-          class="header-logo"
-        />
-        <h1>ComidaRápida</h1>
-      </div>
-      <!-- Flujo confuso: “Restaurantes” y “Categorías” parecen lo mismo pero son pasos distintos -->
-      <div class="steps" aria-label="Pasos">
-        <span class="step active" data-step-indicator="1">
+      <div class="header-inner">
+        <div class="header-brand">
           <img
-            src="./assets/ico-ubicacion.svg"
-            width="14"
-            height="14"
+            src="./assets/logo-delivery.svg"
+            width="44"
+            height="44"
             alt=""
-            class="step-ico"
+            class="header-logo"
           />
-          1. Local
-        </span>
-        <span class="step" data-step-indicator="2">
-          <img
-            src="./assets/ico-menu.svg"
-            width="14"
-            height="14"
-            alt=""
-            class="step-ico"
-          />
-          2. Menú
-        </span>
-        <span class="step subtle-step" data-step-indicator="3">
-          <img
-            src="./assets/ico-lista.svg"
-            width="14"
-            height="14"
-            alt=""
-            class="step-ico"
-          />
-          Resumen
-        </span>
+          <div class="header-brand-text">
+            <h1>ComidaRápida</h1>
+            <p class="header-tagline">Comida recién hecha, en la puerta de casa</p>
+          </div>
+        </div>
+        <div class="steps-wrap" data-progress="1">
+          <div class="nav-progress" aria-hidden="true">
+            <span class="nav-progress-fill"></span>
+          </div>
+          <nav class="steps" aria-label="Pasos del pedido">
+            <span
+              class="step active"
+              data-step-indicator="1"
+              aria-current="step"
+            >
+              <span class="step-num">1</span>
+              <img
+                src="./assets/ico-ubicacion.svg"
+                width="14"
+                height="14"
+                alt=""
+                class="step-ico"
+              />
+              <span class="step-label">Restaurante</span>
+            </span>
+            <span class="step-connector" aria-hidden="true"></span>
+            <span class="step" data-step-indicator="2">
+              <span class="step-num">2</span>
+              <img
+                src="./assets/ico-menu.svg"
+                width="14"
+                height="14"
+                alt=""
+                class="step-ico"
+              />
+              <span class="step-label">Menú</span>
+            </span>
+            <span class="step-connector" aria-hidden="true"></span>
+            <span class="step subtle-step" data-step-indicator="3">
+              <span class="step-num">3</span>
+              <img
+                src="./assets/ico-lista.svg"
+                width="14"
+                height="14"
+                alt=""
+                class="step-ico"
+              />
+              <span class="step-label">Pago y envío</span>
+            </span>
+          </nav>
+        </div>
       </div>
     </header>
 
     <main class="main">
-      <!-- Paso 1: elegir restaurante (y filtro por categoría poco claro) -->
       <section id="step-restaurante" class="panel active">
-        <h2>¿Dónde pedir?</h2>
-        <p class="muted">
-          Primero el local. La categoría filtra pero no avanza de paso.
-        </p>
-        <div class="filtros">
-          <label class="sr-only" for="filtro-cat">Categoría</label>
-          <select id="filtro-cat" aria-label="Filtrar por tipo de comida">
-            <option value="todas">Todas</option>
-            <option value="pizza">Pizza</option>
-            <option value="asiatica">Asiática</option>
-            <option value="hamburguesas">Hamburguesas</option>
-          </select>
+        <div class="layout-hero">
+          <div class="section-intro">
+            <p class="eyebrow">Paso 1 · Tu zona</p>
+            <h2>Elige dónde quieres pedir</h2>
+            <p class="lead">
+              Selecciona un restaurante. Puedes filtrar por tipo de cocina para
+              encontrar antes lo que más te apetezca.
+            </p>
+          </div>
+          <div class="filtros filtros--panel">
+            <label class="filtros-label" for="filtro-cat">Tipo de comida</label>
+            <div class="filtros-control">
+              <select id="filtro-cat" aria-label="Filtrar por tipo de comida">
+                <option value="todas">Todas las cocinas</option>
+                <option value="pizza">Pizza e italiana</option>
+                <option value="asiatica">Asiática</option>
+                <option value="hamburguesas">Hamburguesas</option>
+              </select>
+            </div>
+          </div>
         </div>
         <ul id="lista-restaurantes" class="lista-cards"></ul>
       </section>
 
-      <!-- Paso 2: productos del restaurante elegido -->
       <section id="step-productos" class="panel" hidden>
-        <button type="button" class="link-back confusing" id="btn-volver-rest">
-          &larr; Cambiar sitio
-        </button>
-        <h2 id="titulo-restaurante">Menú</h2>
+        <div class="menu-head">
+          <button type="button" class="link-back" id="btn-volver-rest">
+            <span class="link-back-ico" aria-hidden="true">←</span>
+            Otro restaurante
+          </button>
+          <h2 id="titulo-restaurante" class="menu-title">Menú</h2>
+          <p class="menu-hint">Toca <strong>+</strong> para añadir al pedido</p>
+        </div>
         <ul id="lista-platos" class="lista-platos"></ul>
         <div class="sticky-cta">
-          <!-- Botón resumen poco visible -->
-          <button type="button" id="btn-carrito" class="btn btn-faint">
-            Ver resumen del pedido
+          <button type="button" id="btn-carrito" class="btn btn-cart">
+            <span class="btn-cart-inner">
+              <span class="btn-cart-label">Ver mi pedido</span>
+              <span class="btn-cart-sub">Revisa platos y total</span>
+            </span>
+            <span class="btn-cart-chev" aria-hidden="true">›</span>
           </button>
         </div>
       </section>
 
-      <!-- Paso 3: resumen -->
       <section id="step-resumen" class="panel" hidden>
-        <h2>Tu pedido</h2>
-        <p class="muted">
-          Revise antes de confirmar. Para añadir más, debe volver atrás sin
-          etiqueta clara.
-        </p>
-        <ul id="lista-resumen" class="lista-resumen"></ul>
-        <p id="resumen-vacio" class="muted">Nada seleccionado.</p>
-        <p class="total-line">
-          Total estimado: <strong id="total-delivery">0,00 €</strong>
-        </p>
-        <div class="actions">
-          <button
-            type="button"
-            class="btn btn-ghost-small"
-            id="btn-seguir-comprando"
-          >
-            Seguir en menú
-          </button>
-          <button type="button" id="btn-comprar" class="btn btn-primary">
-            <img
-              src="./assets/ico-pedido.svg"
-              width="18"
-              height="18"
-              alt=""
-              class="btn-ico-inline"
-            />
-            Confirmar pedido
-          </button>
+        <div class="layout-checkout">
+          <div class="section-intro section-intro--compact">
+            <p class="eyebrow">Paso 3 · Confirmación</p>
+            <h2>Tu pedido</h2>
+            <p class="lead">
+              Revisa los platos y el importe. Si quieres añadir más, vuelve al menú
+              con el botón de abajo.
+            </p>
+          </div>
+          <div class="checkout-card">
+            <h3 class="checkout-card-title">Resumen del pedido</h3>
+            <ul id="lista-resumen" class="lista-resumen"></ul>
+            <p id="resumen-vacio" class="empty-cart muted">
+              Aún no has añadido ningún plato. Vuelve al menú y marca lo que
+              quieras.
+            </p>
+            <div class="total-block">
+              <span class="total-block-label">Total estimado</span>
+              <strong class="total-block-value" id="total-delivery">0,00 €</strong>
+            </div>
+            <div class="actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="btn-seguir-comprando"
+              >
+                Seguir comprando
+              </button>
+              <button type="button" id="btn-comprar" class="btn btn-primary">
+                <img
+                  src="./assets/ico-pedido.svg"
+                  width="18"
+                  height="18"
+                  alt=""
+                  class="btn-ico-inline"
+                />
+                Confirmar y pagar
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- Confirmación -->
       <section id="step-confirmacion" class="panel panel-center" hidden>
-        <h2>Pedido enviado</h2>
-        <p id="msg-confirm">En breve recibirá el tiempo estimado.</p>
-        <button type="button" class="btn btn-primary" id="btn-nuevo">
-          Nuevo pedido
-        </button>
+        <div class="success-card">
+          <div class="success-icon" aria-hidden="true">✓</div>
+          <h2>¡Pedido confirmado!</h2>
+          <p id="msg-confirm" class="success-msg">
+            En breve recibirá el tiempo estimado.
+          </p>
+          <button type="button" class="btn btn-primary" id="btn-nuevo">
+            Hacer otro pedido
+          </button>
+        </div>
       </section>
     </main>
 
     <footer class="footer">
-      <small>Prototipo delivery — tiempos simulados</small>
+      <small>ComidaRápida · Entrega simulada · Tiempos orientativos</small>
     </footer>
 
     <script src="./script.js"></script>
