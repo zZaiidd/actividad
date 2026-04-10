@@ -761,6 +761,30 @@ button.header-brand:focus-visible {
   padding: 0.22rem 0.6rem;
   border-radius: var(--radius-pill);
   border: 1px solid rgba(249, 115, 22, 0.25);
+  margin-bottom: 0.45rem;
+}
+
+.card-rest__info-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.info-icon {
+  font-size: 0.85rem;
+  line-height: 1;
 }
 
 .menu-head {
@@ -824,11 +848,16 @@ button.header-brand:focus-visible {
   border-color: var(--electric);
   background: #f0f9ff;
   transform: translateX(-2px);
-  box-shadow: var(--shadow-glow-cyan);
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.25), 0 8px 32px rgba(34, 211, 238, 0.2);
 }
 
 .link-back:active {
   transform: translateX(0) scale(0.98);
+}
+
+.link-back:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--electric);
 }
 
 .link-back-ico {
@@ -865,7 +894,7 @@ button.header-brand:focus-visible {
   padding: 0 0.35rem;
   border-radius: 8px;
   color: #fff;
-  background: linear-gradient(135deg, var(--accent), var(--primary));
+  background: linear-gradient(145deg, var(--electric) 0%, #6366f1 45%, var(--rose) 100%);
   font-weight: 800;
 }
 
@@ -1004,6 +1033,15 @@ button.header-brand:focus-visible {
   transform: scale(0.94);
 }
 
+.btn-mini:focus-visible {
+  outline: none;
+  box-shadow:
+    0 4px 14px rgba(99, 102, 241, 0.4),
+    0 2px 6px rgba(15, 23, 42, 0.12),
+    0 0 0 2px #fff,
+    0 0 0 5px rgba(99, 102, 241, 0.7);
+}
+
 .sticky-cta {
   position: fixed;
   bottom: 1.15rem;
@@ -1034,8 +1072,8 @@ button.header-brand:focus-visible {
   font: inherit;
   font-weight: 800;
   color: #fff;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 40%, #c2410c 100%);
-  box-shadow: var(--shadow-lg), 0 4px 24px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, var(--success) 0%, var(--success-hot) 55%, #0d9488 100%);
+  box-shadow: var(--shadow-lg), 0 4px 24px rgba(16, 185, 129, 0.2);
   transition: transform var(--transition-fast), box-shadow var(--transition-med), filter 0.15s;
 }
 
@@ -1050,13 +1088,13 @@ button.header-brand:focus-visible {
       box-shadow:
         var(--shadow-lg),
         0 4px 24px rgba(0, 0, 0, 0.12),
-        0 0 0 0 rgba(249, 115, 22, 0.35);
+        0 0 0 0 rgba(16, 185, 129, 0.35);
     }
     50% {
       box-shadow:
-        0 24px 48px rgba(234, 88, 12, 0.38),
+        0 24px 48px rgba(16, 185, 129, 0.38),
         0 8px 24px rgba(0, 0, 0, 0.12),
-        0 0 20px 4px rgba(249, 115, 22, 0.25);
+        0 0 20px 4px rgba(16, 185, 129, 0.25);
     }
   }
 }
@@ -1072,7 +1110,7 @@ button.header-brand:focus-visible {
 
 .btn-cart:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--primary);
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--success);
 }
 
 .btn-cart-inner {
@@ -1136,7 +1174,7 @@ button.header-brand:focus-visible {
 
 .resumen-line {
   display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+  grid-template-columns: 2.75rem minmax(0, 1fr) auto auto auto;
   align-items: center;
   gap: 0.7rem 0.85rem;
   padding: 0.72rem 0;
@@ -1176,8 +1214,96 @@ button.header-brand:focus-visible {
   line-height: 1.35;
 }
 
-.resumen-precio {
+.resumen-controles {
   grid-column: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.55rem;
+  background: rgba(241, 245, 249, 0.6);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.btn-resumen-ctrl {
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 700;
+  border: 1px solid var(--border-strong);
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  transition: all var(--transition-fast);
+}
+
+.btn-resumen-ctrl:hover {
+  background: var(--electric);
+  color: white;
+  border-color: var(--electric);
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(34, 211, 238, 0.3);
+}
+
+.btn-resumen-ctrl:active {
+  transform: scale(0.95);
+}
+
+.btn-resumen-ctrl:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--electric);
+}
+
+.resumen-cantidad {
+  min-width: 1.8rem;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.btn-resumen-delete {
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  font-weight: 700;
+  border: none;
+  background: none;
+  color: var(--rose);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn-resumen-delete:hover {
+  background: rgba(251, 113, 133, 0.1);
+  color: #d32f37;
+  transform: scale(1.15);
+}
+
+.btn-resumen-delete:active {
+  transform: scale(0.9);
+}
+
+.btn-resumen-delete:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px rgba(251, 113, 133, 0.7);
+}
+
+.resumen-precio {
+  grid-column: 4;
   font-weight: 800;
   color: var(--primary-hot);
   white-space: nowrap;
@@ -1248,6 +1374,12 @@ button.header-brand:focus-visible {
     filter 0.15s,
     border-color var(--transition-med),
     background var(--transition-med);
+  border: none;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px rgba(99, 102, 241, 0.7);
 }
 
 .btn-primary {
@@ -1274,7 +1406,7 @@ button.header-brand:focus-visible {
 
 .btn-primary:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--success);
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--success);
 }
 
 .btn-secondary {
@@ -1287,11 +1419,16 @@ button.header-brand:focus-visible {
   border-color: var(--electric);
   background: #f0f9ff;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-glow-cyan);
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.25), 0 8px 32px rgba(34, 211, 238, 0.2);
 }
 
 .btn-secondary:active {
   transform: scale(0.99);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--electric);
 }
 
 .btn-ico-inline {

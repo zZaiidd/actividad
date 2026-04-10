@@ -7,10 +7,10 @@
   'use strict';
 
   var RESTAURANTES = [
-    { id: 'r1', nombre: 'Pizzería Napoli', categoria: 'pizza', img: './assets/rest-r1.svg' },
-    { id: 'r2', nombre: 'Sushi Roll', categoria: 'asiatica', img: './assets/rest-r2.svg' },
-    { id: 'r3', nombre: 'Burger Norte', categoria: 'hamburguesas', img: './assets/rest-r3.svg' },
-    { id: 'r4', nombre: 'Mamma Mia Express', categoria: 'pizza', img: './assets/rest-r4.svg' }
+    { id: 'r1', nombre: 'Pizzería Napoli', categoria: 'pizza', img: './assets/rest-r1.svg', rating: 4.7, timeDelivery: 25, avgPrice: 9.70 },
+    { id: 'r2', nombre: 'Sushi Roll', categoria: 'asiatica', img: './assets/rest-r2.svg', rating: 4.5, timeDelivery: 35, avgPrice: 11.75 },
+    { id: 'r3', nombre: 'Burger Norte', categoria: 'hamburguesas', img: './assets/rest-r3.svg', rating: 4.8, timeDelivery: 20, avgPrice: 10.75 },
+    { id: 'r4', nombre: 'Mamma Mia Express', categoria: 'pizza', img: './assets/rest-r4.svg', rating: 4.6, timeDelivery: 30, avgPrice: 10.25 }
   ];
 
   /** Platos por restaurante (cada uno con imagen en ./assets/) */
@@ -108,6 +108,17 @@
         escapeHtml(r.nombre) +
         '</strong><span class="tag">' +
         escapeHtml(r.categoria) +
+        '</span>' +
+        '<span class="card-rest__info-footer">' +
+        '<span class="info-item"><span class="info-icon">⭐</span>' +
+        r.rating +
+        '</span>' +
+        '<span class="info-item"><span class="info-icon">⏱</span>' +
+        r.timeDelivery +
+        ' min</span>' +
+        '<span class="info-item"><span class="info-icon">€</span>~' +
+        formatEuros(r.avgPrice).replace(' €', '') +
+        '</span>' +
         '</span></span>';
       li.appendChild(btn);
       elListaRest.appendChild(li);
@@ -192,6 +203,24 @@
     }
   }
 
+  function quitarPlato(idPlato) {
+    var linea = lineaPedido(idPlato);
+    if (linea && linea.cantidad > 1) {
+      linea.cantidad -= 1;
+    } else if (linea) {
+      eliminarPlato(idPlato);
+    }
+  }
+
+  function eliminarPlato(idPlato) {
+    for (var i = 0; i < pedido.length; i++) {
+      if (pedido[i].idPlato === idPlato) {
+        pedido.splice(i, 1);
+        break;
+      }
+    }
+  }
+
   function cantidadEnPedido(idPlato) {
     var linea = lineaPedido(idPlato);
     return linea ? linea.cantidad : 0;
@@ -259,17 +288,37 @@
       var l = pedido[i];
       var li = document.createElement('li');
       li.className = 'resumen-line';
+      li.setAttribute('data-linea-id', l.idPlato);
       li.innerHTML =
         '<img class="resumen-thumb" src="' +
         l.img +
         '" width="40" height="40" alt="">' +
         '<span class="resumen-nombre">' +
         escapeHtml(l.nombre) +
-        ' × ' +
+        '</span>' +
+        '<span class="resumen-controles">' +
+        '<button type="button" class="btn-resumen-ctrl btn-resumen-minus" data-accion="remove" data-plato="' +
+        l.idPlato +
+        '" aria-label="Quitar ' +
+        escapeAttr(l.nombre) +
+        '">−</button>' +
+        '<span class="resumen-cantidad" aria-live="polite">' +
         l.cantidad +
-        '</span><span class="resumen-precio">' +
+        '</span>' +
+        '<button type="button" class="btn-resumen-ctrl btn-resumen-plus" data-accion="add" data-plato="' +
+        l.idPlato +
+        '" aria-label="Agregar ' +
+        escapeAttr(l.nombre) +
+        '">+</button>' +
+        '</span>' +
+        '<span class="resumen-precio">' +
         formatEuros(l.precioUnit * l.cantidad) +
-        '</span>';
+        '</span>' +
+        '<button type="button" class="btn-resumen-delete" data-accion="delete" data-plato="' +
+        l.idPlato +
+        '" aria-label="Eliminar ' +
+        escapeAttr(l.nombre) +
+        '">×</button>';
       elListaResumen.appendChild(li);
     }
     elTotal.textContent = formatEuros(totalPedido());
@@ -307,6 +356,21 @@
   document.getElementById('btn-carrito').addEventListener('click', function () {
     pintarResumen();
     mostrarSoloPanel(elStepRes);
+  });
+
+  elListaResumen.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-accion]');
+    if (!btn) return;
+    var accion = btn.getAttribute('data-accion');
+    var idPlato = btn.getAttribute('data-plato');
+    if (accion === 'add') {
+      agregarPlato(idPlato, '', 0, '');
+    } else if (accion === 'remove') {
+      quitarPlato(idPlato);
+    } else if (accion === 'delete') {
+      eliminarPlato(idPlato);
+    }
+    pintarResumen();
   });
 
   document.getElementById('btn-seguir-comprando').addEventListener('click', function () {
